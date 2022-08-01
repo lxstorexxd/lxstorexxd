@@ -16,3 +16,6 @@ Here are some ideas to get you started:
 -->
 
 ![GitHub Stats](https://github-readme-stats.vercel.app/api?username=lxstorexxd&theme=synthwave)
+
+
+https://astatium.stream.voidboost.cc/5/4/9/5/8/3/8f1e08125d2a5d1a1c25028d2d6af7e4:2022080201:Ylh6NVdkdTZ1TlZLRTZXb2tjSTIzK2UvWXlycDMyaWpZY1ZZR2tURm5XVTVSOUpaTG1aWGJHdnQwcUxZNmpXZzZ6Y2xGSDdRWkdrVDRhNkkwZFhwY3c9PQ==/0kmle.mp4

@@ -16,5 +16,5 @@ Here are some ideas to get you started:
 -->
 <div>
 <img height="180em" src="https://github-readme-stats.vercel.app/api?username=lxstorexxd&theme=synthwave"/>
-<img height="180em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=katuha1&layout=compact&langs_count=6"/>
+<img height="180em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=lxstorexxd&layout=compact&langs_count=6"/>
 </div>

@@ -15,6 +15,6 @@ Here are some ideas to get you started:
 - ⚡ Fun fact: ...
 -->
 <div>
-![GitHub Stats](https://github-readme-stats.vercel.app/api?username=lxstorexxd&theme=synthwave)
+<img height="180em" src="https://github-readme-stats.vercel.app/api?username=lxstorexxd&theme=synthwave"/>
 <img height="180em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=katuha1&layout=compact&langs_count=6"/>
 </div>

@@ -1,0 +1,191 @@
+-- Создание базы данных
+CREATE DATABASE Test;
+GO
+
+-- Переключение на созданную базу данных
+USE Test;
+GO
+
+-- Таблица для хранения информации о менеджерах
+CREATE TABLE Менеджер (
+    ID INT PRIMARY KEY IDENTITY,
+    ФИО NVARCHAR(255) NOT NULL,
+    Телефон NVARCHAR(20),
+    Email NVARCHAR(100)
+);
+GO
+
+-- Таблица для хранения информации о мастерах производства
+CREATE TABLE Мастер_производства (
+    ID INT PRIMARY KEY IDENTITY,
+    ФИО NVARCHAR(255) NOT NULL,
+    Телефон NVARCHAR(20),
+    Email NVARCHAR(100),
+    Описание_технологий NVARCHAR(MAX)
+);
+GO
+
+-- Таблица для хранения информации о цехах
+CREATE TABLE Цех (
+    Номер INT PRIMARY KEY IDENTITY,
+    Наименование NVARCHAR(255) NOT NULL,
+    Описание NVARCHAR(MAX),
+    ID_мастера INT,
+    FOREIGN KEY (ID_мастера) REFERENCES Мастер_производства(ID)
+);
+GO
+
+-- Таблица для хранения информации об агентах
+CREATE TABLE Агент (
+    ID INT PRIMARY KEY IDENTITY,
+    Наименование_компании NVARCHAR(255) NOT NULL,
+    Тип_агента NVARCHAR(50) NOT NULL,
+    Юридический_адрес NVARCHAR(MAX),
+    ИНН NVARCHAR(20) NOT NULL,
+    КПП NVARCHAR(20),
+    ФИО_директора NVARCHAR(255),
+    Телефон NVARCHAR(20),
+    Email NVARCHAR(100),
+    Логотип VARBINARY(MAX),
+    Приоритетность INT
+);
+GO
+
+-- Таблица для хранения информации о продукции
+CREATE TABLE Продукция (
+    Артикул NVARCHAR(50) PRIMARY KEY,
+    Наименование NVARCHAR(255) NOT NULL,
+    Тип_продукта NVARCHAR(100),
+    Описание NVARCHAR(MAX),
+    Изображение VARBINARY(MAX),
+    Минимальная_стоимость DECIMAL(10, 2),
+    Длина_упаковки DECIMAL(10, 2),
+    Ширина_упаковки DECIMAL(10, 2),
+    Высота_упаковки DECIMAL(10, 2),
+    Вес_без_упаковки DECIMAL(10, 2),
+    Вес_с_упаковкой DECIMAL(10, 2),
+    Сертификат_качества VARBINARY(MAX),
+    Номер_стандарта NVARCHAR(50),
+    Время_производства INT,
+    Себестоимость DECIMAL(10, 2),
+    Номер_цеха INT,
+    Необходимое_количество_человек INT,
+    FOREIGN KEY (Номер_цеха) REFERENCES Цех(Номер)
+);
+GO
+
+-- Таблица для хранения информации о заявках
+CREATE TABLE Заявка (
+    ID INT PRIMARY KEY IDENTITY,
+    ID_агента INT NOT NULL,
+    ID_менеджера INT NOT NULL,
+    Дата_создания DATE,
+    Статус NVARCHAR(50),
+    Дата_предоплаты DATE,
+    Дата_полной_оплаты DATE,
+    Дата_получения DATE,
+    FOREIGN KEY (ID_агента) REFERENCES Агент(ID),
+    FOREIGN KEY (ID_менеджера) REFERENCES Менеджер(ID)
+);
+GO
+
+-- Таблица для хранения связей между заявками и продукцией
+CREATE TABLE Заявка_Продукция (
+    ID_заявки INT,
+    Артикул_продукции NVARCHAR(50),
+    Количество INT,
+    Стоимость DECIMAL(10, 2),
+    Время_производства INT,
+    PRIMARY KEY (ID_заявки, Артикул_продукции),
+    FOREIGN KEY (ID_заявки) REFERENCES Заявка(ID),
+    FOREIGN KEY (Артикул_продукции) REFERENCES Продукция(Артикул)
+);
+GO
+
+-- Таблица для хранения информации о сотрудниках
+CREATE TABLE Сотрудник (
+    ID INT PRIMARY KEY IDENTITY,
+    ФИО NVARCHAR(255) NOT NULL,
+    Дата_рождения DATE,
+    Паспортные_данные NVARCHAR(100),
+    Банковские_реквизиты NVARCHAR(100),
+    Наличие_семьи BIT,
+    Проблемы_со_здоровьем NVARCHAR(MAX),
+    NFC_карта_ID NVARCHAR(50),
+    Номер_цеха INT,
+    FOREIGN KEY (Номер_цеха) REFERENCES Цех(Номер)
+);
+GO
+
+-- Таблица для хранения информации о материалах
+CREATE TABLE Материал (
+    ID INT PRIMARY KEY IDENTITY,
+    Наименование NVARCHAR(255) NOT NULL,
+    Тип_материала NVARCHAR(100),
+    Количество_в_упаковке DECIMAL(10, 2),
+    Единица_измерения NVARCHAR(50),
+    Количество_на_складе DECIMAL(10, 2),
+    Минимально_допустимое_количество DECIMAL(10, 2),
+    Описание NVARCHAR(MAX),
+    Изображение VARBINARY(MAX),
+    Стоимость DECIMAL(10, 2)
+);
+GO
+
+-- Таблица для хранения информации о поставщиках
+CREATE TABLE Поставщик (
+    ID INT PRIMARY KEY IDENTITY,
+    Наименование NVARCHAR(255) NOT NULL,
+    ИНН NVARCHAR(20) NOT NULL,
+    Тип NVARCHAR(50),
+    История_поставок NVARCHAR(MAX),
+    Качество_поставляемых_материалов NVARCHAR(MAX)
+);
+GO
+
+-- Таблица для хранения связей между материалами и поставщиками
+CREATE TABLE Материал_Поставщик (
+    ID_материала INT,
+    ID_поставщика INT,
+    PRIMARY KEY (ID_материала, ID_поставщика),
+    FOREIGN KEY (ID_материала) REFERENCES Материал(ID),
+    FOREIGN KEY (ID_поставщика) REFERENCES Поставщик(ID)
+);
+GO
+
+-- Таблица для хранения истории изменений количества материалов
+CREATE TABLE История_изменений_материалов (
+    ID INT PRIMARY KEY IDENTITY,
+    ID_материала INT NOT NULL,
+    Дата_изменения DATE,
+    Количество_ДО DECIMAL(10, 2),
+    Количество_ПОСЛЕ DECIMAL(10, 2),
+    FOREIGN KEY (ID_материала) REFERENCES Материал(ID)
+);
+GO
+
+-- Таблица для хранения истории изменений приоритетности
+CREATE TABLE История_изменений_приоритетности (
+    ID INT PRIMARY KEY IDENTITY,
+    ID_агента INT NOT NULL,
+    Дата_изменения DATE,
+    Старый_приоритет INT,
+    Новый_приоритет INT,
+    ID_менеджера INT,
+    FOREIGN KEY (ID_агента) REFERENCES Агент(ID),
+    FOREIGN KEY (ID_менеджера) REFERENCES Менеджер(ID)
+);
+GO
+
+-- Таблица для хранения истории реализации продукции
+CREATE TABLE История_реализации_продукции (
+    ID INT PRIMARY KEY IDENTITY,
+    ID_агента INT NOT NULL,
+    Дата_реализации DATE,
+    Артикул_продукции NVARCHAR(50),
+    Количество INT,
+    Цена_продажи DECIMAL(10, 2),
+    FOREIGN KEY (ID_агента) REFERENCES Агент(ID),
+    FOREIGN KEY (Артикул_продукции) REFERENCES Продукция(Артикул)
+);
+GO
